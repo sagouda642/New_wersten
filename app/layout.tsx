@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Wersten Union",
+  title: "Track your money transfer | Western Union",
   description: "Wesrten Union",
 };
 
