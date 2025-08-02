@@ -17,19 +17,13 @@ import emailjs from "@emailjs/browser";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import * as motion from "motion/react-client";
-import { useRouter } from "next/navigation";
 
-export default function Home() {
-  const router = useRouter();
+export default function TrackTransfer() {
   const [isactive, setisActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   console.log(setIsLoading);
   const [otp, setOtp] = useState("");
 
-  useEffect(() => {
-    router.push("/web/global-service/track-transfer/");
-  }, [router]);
-  
   useEffect(() => {
     if (otp.length == 10) {
       setIsLoading(true);
@@ -183,3 +177,5 @@ export default function Home() {
     </div>
   );
 }
+
+
