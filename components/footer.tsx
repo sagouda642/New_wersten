@@ -25,12 +25,12 @@ const Footer = () => {
   return (
     <div className="w-full items-center flex justify-center">
       <div className="  p-5  lg:py-5 flex flex-col items-center  gap-10 w-full md:w-3/5 ">
-        <div className="flex gap-2 flex-wrap justify-center ">
+        <div className="flex gap-2 flex-wrap  font-sans ">
           {navLinks.map((link) => (
             <Link
               href={link.href}
               key={link.label}
-              className="text-[10px]  font-normal"
+              className="text-[12px]  "
             >
               {link.label} {"|"}
             </Link>
